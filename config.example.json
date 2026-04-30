@@ -79,11 +79,11 @@
     "_help": "shape: 'single brand' | 'multi-brand' | 'agency' | 'internal' | free text. project_taxonomy: 'client' | 'client+project' | 'project' | free text. active_projects_source: where the live list of active clients/projects lives (path or DB ID) — used to disambiguate which project a meeting is about."
   },
   "systems": {
-    "cos": {
+    "project_state": {
       "enabled": false,
       "master_path": "",
-      "project_cos_pattern": "",
-      "_help": "master_path is the portfolio-level COS file. project_cos_pattern is a glob describing per-project cos.yaml files, e.g. /path/to/{client}/{project}/cos.yaml. Leave blank if you don't use COS files."
+      "project_state_pattern": "",
+      "_help": "master_path is the portfolio-level state file. project_state_pattern is a glob describing per-project state files, e.g. /path/to/{client}/{project}/state.yaml. Leave blank if you don't use project state files."
     },
     "notion": {
       "enabled": false,

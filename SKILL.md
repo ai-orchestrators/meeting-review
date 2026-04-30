@@ -1,6 +1,6 @@
 ---
 name: meeting-review
-description: "**Meeting Review & PM Update**: Pull a meeting transcript from a connected MCP (Fathom, Fireflies, Otter, Read AI, Grain, Notion meeting notes, or any other meeting MCP) or take a manual paste, extract every PM-relevant item, and sync changes across configured downstream systems (COS files, Notion tasks, Reclaim, dashboards). Use whenever the user says 'meeting review', 'process this meeting', 'review this transcript', 'update from meeting', 'sync meeting notes', or uploads/references a transcript that needs to be turned into project updates. The skill runs a one-time setup on first use to learn transcript sources, business context, downstream systems, and output preferences, then handles the full loop on every later run: fetch transcript → analyse → clarify gaps → propose updates → apply on approval."
+description: "**Meeting Review & PM Update**: Pull a meeting transcript from a connected MCP (Fathom, Fireflies, Otter, Read AI, Grain, Notion meeting notes, or any other meeting MCP) or take a manual paste, extract every PM-relevant item, and sync changes across configured downstream systems (project state files, Notion tasks, Reclaim, dashboards). Use whenever the user says 'meeting review', 'process this meeting', 'review this transcript', 'update from meeting', 'sync meeting notes', or uploads/references a transcript that needs to be turned into project updates. The skill runs a one-time setup on first use to learn transcript sources, business context, downstream systems, and output preferences, then handles the full loop on every later run: fetch transcript → analyse → clarify gaps → propose updates → apply on approval."
 allowedTools: [AskUserQuestion, Read, Write, Edit, Bash, ToolSearch]
 ---
 
@@ -87,9 +87,9 @@ Run the blocks in order. The transcript-source answer in Block B gates a couple 
 
 #### Block D — Downstream systems
 
-7. **Do you use COS files (project state in YAML)?** If yes:
-   - Path to the master COS file
-   - Glob pattern for per-project cos.yaml files (skip if you don't have project-level COS files)
+7. **Do you use project state files (YAML)?** If yes:
+   - Path to the master project state file
+   - Glob pattern for per-project state files (skip if you don't have project-level state files)
 8. **Do you use Notion for task tracking?** If yes:
    - Tasks DB collection ID (`collection://...`)
    - Project Dashboard DB collection ID (skip if you don't link tasks to projects)
@@ -130,7 +130,7 @@ Confirm to the user: "Setup saved. Config is at `config.json` in the skill folde
 
 ### Step 0.4: Load Config
 
-Load `config.json`. The rest of the skill reads from `config` to decide which systems to update. Whenever you see `{user_name}`, `{cos_master_path}`, `{notion_tasks_db_id}` etc. below, substitute the value from config. Skip any stage or step whose enabling system has `enabled: false`.
+Load `config.json`. The rest of the skill reads from `config` to decide which systems to update. Whenever you see `{user_name}`, `{project_state_master_path}`, `{notion_tasks_db_id}` etc. below, substitute the value from config. Skip any stage or step whose enabling system has `enabled: false`.
 
 ---
 
@@ -189,19 +189,19 @@ Capture everything. Filtering happens in Stage 3 and Stage 5. Present the extrac
 
 ---
 
-## Stage 2: Cross-Reference COS Files
+## Stage 2: Cross-Reference Project State Files
 
 **Goal:** Compare extracted items against current COS state.
 
-**Skip this stage entirely if `systems.cos.enabled` is false.**
+**Skip this stage entirely if `systems.project_state.enabled` is false.**
 
-### Step 2.1: Read the Master COS File
+### Step 2.1: Read the Master State File
 
-Read the file at `{cos_master_path}` and find the relevant client / project section(s). Pull current status, summary, next deliverable, blockers, next up, risks. Note matches against extracted items.
+Read the file at `{project_state_master_path}` and find the relevant client / project section(s). Pull current status, summary, next deliverable, blockers, next up, risks. Note matches against extracted items.
 
-### Step 2.2: Read Project-Level cos.yaml
+### Step 2.2: Read Project-Level State
 
-If `systems.cos.project_cos_pattern` is set, resolve the pattern for the current client / project and read those files. This is where detailed state lives.
+If `systems.project_state.project_state_pattern` is set, resolve the pattern for the current client / project and read those files. This is where detailed state lives.
 
 ### Step 2.3: Flag Differences
 
@@ -300,11 +300,11 @@ Below the summary, list every proposed change grouped by system. Only include se
 ```
 ## Proposed Updates
 
-### COS file changes (if enabled)
+### project state file changes (if enabled)
 1. [Client > Project]: update summary — [old → new]
 2. [Client > Project]: add to next_up — "[new task]"
 
-### Project cos.yaml changes (if enabled)
+### Project state changes (if enabled)
 1. Update deliverable status: [item] → [new status]
 
 ### Notion (if enabled)
@@ -333,9 +333,9 @@ Ask the user to approve via AskUserQuestion. Options: "Approved, go ahead", "Nee
 Execute in this order: master state → project state → external task systems → dashboard → save summary.
 
 ### Step 6.1: Update Master COS (if enabled)
-Edit `{cos_master_path}` with targeted Edits. Confirm changes.
+Edit `{project_state_master_path}` with targeted Edits. Confirm changes.
 
-### Step 6.2: Update Project cos.yaml (if enabled)
+### Step 6.2: Update Project State (if enabled)
 Edit project-level files. Confirm changes.
 
 ### Step 6.3: Update Notion (if enabled)
