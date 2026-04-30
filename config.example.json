@@ -1,0 +1,131 @@
+{
+  "schema_version": 2,
+  "configured": false,
+  "user": {
+    "name": "",
+    "language_variant": ""
+  },
+  "transcript_sources": {
+    "fathom": {
+      "enabled": false,
+      "namespace_prefix": "mcp__fathom__",
+      "list_tool": "list_meetings",
+      "fetch_tool": "get_transcript",
+      "lookback_days": 7,
+      "extra": {},
+      "_help": "Fathom transcript MCP. Defaults reflect the standard Fathom MCP (verified). Override namespace_prefix or tool names if your install differs. extra can hold a team filter, e.g. { team: 'Sales' }."
+    },
+    "fireflies": {
+      "enabled": false,
+      "namespace_prefix": "",
+      "list_tool": "",
+      "fetch_tool": "",
+      "lookback_days": 7,
+      "extra": {},
+      "_help": "Fireflies.ai transcript MCP. Provide the namespace_prefix (e.g. mcp__fireflies__) and the tool names that list recent meetings + fetch a transcript. Found during Stage 0 setup."
+    },
+    "otter": {
+      "enabled": false,
+      "namespace_prefix": "",
+      "list_tool": "",
+      "fetch_tool": "",
+      "lookback_days": 7,
+      "extra": {},
+      "_help": "Otter.ai transcript MCP. Provide the namespace_prefix and tool names during setup."
+    },
+    "read_ai": {
+      "enabled": false,
+      "namespace_prefix": "",
+      "list_tool": "",
+      "fetch_tool": "",
+      "lookback_days": 7,
+      "extra": {},
+      "_help": "Read AI meeting MCP. Provide the namespace_prefix and tool names during setup."
+    },
+    "grain": {
+      "enabled": false,
+      "namespace_prefix": "",
+      "list_tool": "",
+      "fetch_tool": "",
+      "lookback_days": 7,
+      "extra": {},
+      "_help": "Grain meeting MCP. Provide the namespace_prefix and tool names during setup."
+    },
+    "notion_meeting_notes": {
+      "enabled": false,
+      "database_id": "",
+      "_help": "Notion meeting notes DB (collection://...). Skill queries the DB for recent rows and pulls page content as the transcript."
+    },
+    "other_mcp": {
+      "enabled": false,
+      "service_name": "",
+      "namespace_prefix": "",
+      "list_tool": "",
+      "fetch_tool": "",
+      "lookback_days": 7,
+      "extra": {},
+      "_help": "Catch-all for any meeting transcript MCP not listed above (e.g. Granola, Avoma, Krisp, Gong, Zoom). service_name is the human-readable label. namespace_prefix is the MCP prefix like 'mcp__granola__'."
+    },
+    "manual": {
+      "enabled": true,
+      "save_folder": "",
+      "_help": "Always available. User pastes transcript text, drops a file path, or uploads. save_folder optionally stores a copy as transcript-{date}.md."
+    }
+  },
+  "business": {
+    "shape": "",
+    "project_taxonomy": "",
+    "active_projects_source": "",
+    "_help": "shape: 'single brand' | 'multi-brand' | 'agency' | 'internal' | free text. project_taxonomy: 'client' | 'client+project' | 'project' | free text. active_projects_source: where the live list of active clients/projects lives (path or DB ID) — used to disambiguate which project a meeting is about."
+  },
+  "systems": {
+    "cos": {
+      "enabled": false,
+      "master_path": "",
+      "project_cos_pattern": "",
+      "_help": "master_path is the portfolio-level COS file. project_cos_pattern is a glob describing per-project cos.yaml files, e.g. /path/to/{client}/{project}/cos.yaml. Leave blank if you don't use COS files."
+    },
+    "notion": {
+      "enabled": false,
+      "tasks_db_id": "",
+      "project_dashboard_db_id": "",
+      "_help": "Notion DB collection IDs. tasks_db_id holds individual tasks. project_dashboard_db_id holds projects/clients that tasks link to via relation. Leave both blank if you don't use Notion."
+    },
+    "reclaim": {
+      "enabled": false,
+      "task_naming_convention": "",
+      "_help": "Optional Reclaim integration. task_naming_convention is the format you use for task titles, with placeholders like {project}, {category}, {task}. Leave blank for default {project}: {task}."
+    },
+    "dashboard": {
+      "enabled": false,
+      "regenerate_cmd": "",
+      "_help": "Optional dashboard regeneration command run after updates. Leave blank if not used."
+    }
+  },
+  "task_defaults": {
+    "priority_levels": ["P1", "P2", "P3", "P4"],
+    "categories": [],
+    "_help": "priority_levels and categories follow your task system's conventions. categories are optional task tags."
+  },
+  "team": {
+    "owners": [],
+    "_help": "Optional list of team member names so the skill can offer assignees during gap-clarification (Stage 3). Leave empty if you handle assignments yourself."
+  },
+  "output_preferences": {
+    "detail_level": "standard",
+    "sections": [
+      "attendees",
+      "decisions",
+      "completed",
+      "new_tasks",
+      "blockers",
+      "timeline",
+      "open_questions",
+      "context"
+    ],
+    "format": "bullets",
+    "tone": "neutral",
+    "save_path_template": "",
+    "_help": "detail_level: 'concise' | 'standard' | 'detailed'. sections: any of attendees, decisions, completed, new_tasks, blockers, timeline, risks, open_questions, context, quotes. format: 'bullets' | 'mixed' | 'prose'. tone: 'neutral' | 'terse' | 'conversational'. save_path_template supports placeholders {project_path}, {client}, {project}, {date}. Leave blank to skip saving."
+  }
+}
